@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:background="@color/colorSecondaryDark"
         android:drawableEnd="@drawable/ic_checked"
         android:text="@string/update"
         android:textColor="@color/colorWhite"

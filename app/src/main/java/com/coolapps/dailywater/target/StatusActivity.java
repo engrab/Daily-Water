@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,43 +32,38 @@ import java.util.HashMap;
 
 import me.itangqi.waveloadingview.WaveLoadingView;
 
-public final class StatsActivity extends AppCompatActivity {
+public final class StatusActivity extends AppCompatActivity {
     private HashMap findViewCache;
     private LinearLayout banner;
     private SharedPreferences sharedPref;
     private SqliteHelper sqliteHelper;
-    private float totalGlasses;
-    private float totalPercentage;
+    public float totalGlasses;
+    public float totalPercentage;
 
-    public void _$_clearFindViewByIdCache() {
-        HashMap hashMap = this.findViewCache;
-        if (hashMap != null) {
-            hashMap.clear();
-        }
-    }
+
 
     public View findCachedViewById(int i) {
         if (this.findViewCache == null) {
             this.findViewCache = new HashMap();
         }
-        View view = (View) this.findViewCache.get(Integer.valueOf(i));
+        View view = (View) this.findViewCache.get(i);
         if (view != null) {
             return view;
         }
         View findViewById = findViewById(i);
-        this.findViewCache.put(Integer.valueOf(i), findViewById);
+        this.findViewCache.put(i, findViewById);
         return findViewById;
     }
 
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView((int) R.layout.activity_stats);
+        setContentView(R.layout.activity_status);
         AdsUtility.InterstitialAdmob(this);
         SharedPreferences sharedPreferences = getSharedPreferences(AppUtils.Companion.getUSERS_SHARED_PREF(), AppUtils.Companion.getPRIVATE_MODE());
         this.sharedPref = sharedPreferences;
         this.sqliteHelper = new SqliteHelper(this);
-        ((ImageButton) findCachedViewById(R.id.btnBack)).setOnClickListener(new View.OnClickListener() {
+        findCachedViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -164,7 +158,7 @@ public final class StatsActivity extends AppCompatActivity {
             xAxis5.setValueFormatter(new ChartXValueFormatter(dateArray));
             LineChart lineChart18 = (LineChart) findCachedViewById(R.id.chart);
             lineChart18.setData(lineData);
-            ((LineChart) findCachedViewById(R.id.chart)).invalidate();
+            findCachedViewById(R.id.chart).invalidate();
             SharedPreferences sharedPreferences2 = this.sharedPref;
             if (sharedPreferences2 == null) {
             }

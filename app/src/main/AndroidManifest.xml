@@ -22,7 +22,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/MainTheme"/>
         <activity
-            android:name="com.coolapps.dailywater.target.StatsActivity"
+            android:name="com.coolapps.dailywater.target.StatusActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MainTheme" />
         <activity

@@ -7,7 +7,7 @@ import java.util.Calendar;
 
 
 public final class AppUtils {
-    public static final Companion Companion = new Companion( null);
+    public static final Companion Companion = new Companion();
 
     public static final String FIRST_RUN_KEY = "FIRST_RUN_KEY";
 
