@@ -44,31 +44,23 @@ public final class InitUserInfoActivity extends AppCompatActivity {
 
     public String workTime = "";
 
-    public void _$_clearFindViewByIdCache() {
-        HashMap hashMap = this.findViewCache;
-        if (hashMap != null) {
-            hashMap.clear();
-        }
-    }
 
-    public View _$_findCachedViewById(int i) {
-        if (this.findViewCache == null) {
-            this.findViewCache = new HashMap();
+    public View findCachedViewById(int i) {
+        if (findViewCache == null) {
+            findViewCache = new HashMap();
         }
-        View view = (View) this.findViewCache.get(Integer.valueOf(i));
+        View view = (View) findViewCache.get(i);
         if (view != null) {
             return view;
         }
         View findViewById = findViewById(i);
-        this.findViewCache.put(Integer.valueOf(i), findViewById);
+        findViewCache.put(i, findViewById);
         return findViewById;
     }
 
-    public static final  SharedPreferences accessgetSharedPrefp(InitUserInfoActivity $this) {
-        SharedPreferences sharedPreferences = $this.sharedPref;
-        if (sharedPreferences == null) {
-        }
-        return sharedPreferences;
+    public static final  SharedPreferences accessgetSharedPrefp(InitUserInfoActivity context) {
+
+        return context.sharedPref;
     }
 
 
@@ -79,22 +71,15 @@ public final class InitUserInfoActivity extends AppCompatActivity {
             View decorView = window.getDecorView();
             decorView.setSystemUiVisibility(8192);
         }
-        setContentView((int) R.layout.activity_init_user_info);
+        setContentView(R.layout.activity_init_user_info);
         AdsUtility.InterstitialAdmob(this);
         SharedPreferences sharedPreferences = getSharedPreferences(AppUtils.Companion.getUSERS_SHARED_PREF(), AppUtils.Companion.getPRIVATE_MODE());
-        this.sharedPref = sharedPreferences;
-        SharedPreferences sharedPreferences2 = this.sharedPref;
-        if (sharedPreferences2 == null) {
-        }
-        this.wakeupTime = sharedPreferences2.getLong(AppUtils.Companion.getWAKEUP_TIME(), 1558323000000L);
-        SharedPreferences sharedPreferences3 = this.sharedPref;
-        if (sharedPreferences3 == null) {
-        }
-        this.sleepingTime = sharedPreferences3.getLong(AppUtils.Companion.getSLEEPING_TIME_KEY(), 1558369800000L);
-        TextInputLayout textInputLayout = (TextInputLayout) _$_findCachedViewById(R.id.etWakeUpTime);
+        sharedPref = sharedPreferences;
+        wakeupTime = sharedPref.getLong(AppUtils.Companion.getWAKEUP_TIME(), 1558323000000L);
+        sleepingTime = sharedPref.getLong(AppUtils.Companion.getSLEEPING_TIME_KEY(), 1558369800000L);
+        TextInputLayout textInputLayout = (TextInputLayout) findViewById(R.id.etWakeUpTime);
         EditText editText = textInputLayout.getEditText();
-        if (editText == null) {
-        }
+
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +93,7 @@ public final class InitUserInfoActivity extends AppCompatActivity {
                         time.set(11, selectedHour);
                         time.set(12, selectedMinute);
                         wakeupTime = time.getTimeInMillis();
-                        TextInputLayout textInputLayout = (TextInputLayout) findViewById(R.id.etWakeUpTime);
+                        TextInputLayout textInputLayout = findViewById(R.id.etWakeUpTime);
                         EditText editText = textInputLayout.getEditText();
                         if (editText == null) {
 
@@ -122,10 +107,9 @@ public final class InitUserInfoActivity extends AppCompatActivity {
                 mTimePicker.show();
             }
         });
-        TextInputLayout textInputLayout2 = (TextInputLayout) _$_findCachedViewById(R.id.etSleepTime);
+        TextInputLayout textInputLayout2 = (TextInputLayout) findCachedViewById(R.id.etSleepTime);
         EditText editText2 = textInputLayout2.getEditText();
-        if (editText2 == null) {
-        }
+
         editText2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,7 +124,7 @@ public final class InitUserInfoActivity extends AppCompatActivity {
                         time.set(12, selectedMinute);
 
                         sleepingTime = time.getTimeInMillis();
-                        TextInputLayout textInputLayout = (TextInputLayout) findViewById(R.id.etSleepTime);
+                        TextInputLayout textInputLayout = findViewById(R.id.etSleepTime);
                         EditText editText = textInputLayout.getEditText();
 
                         Object[] objArr = {Integer.valueOf(selectedHour), Integer.valueOf(selectedMinute)};
@@ -152,31 +136,31 @@ public final class InitUserInfoActivity extends AppCompatActivity {
                 mTimePicker.show();
             }
         });
-        ((Button) findViewById(R.id.btnContinue)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btnContinue).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Object systemService = getSystemService(INPUT_METHOD_SERVICE);
                 if (systemService != null) {
-                    ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.init_user_info_parent_layout);
+                    ConstraintLayout constraintLayout = findViewById(R.id.init_user_info_parent_layout);
                     ((InputMethodManager) systemService).hideSoftInputFromWindow(constraintLayout.getWindowToken(), 0);
-                    TextInputLayout textInputLayout = (TextInputLayout) findViewById(R.id.etWeight);
+                    TextInputLayout textInputLayout = findViewById(R.id.etWeight);
                     EditText editText = textInputLayout.getEditText();
                     if (editText == null) {
                     }
                     weight = editText.getText().toString();
-                    TextInputLayout textInputLayout2 = (TextInputLayout) findViewById(R.id.etWorkTime);
+                    TextInputLayout textInputLayout2 = findViewById(R.id.etWorkTime);
                     EditText editText2 = textInputLayout2.getEditText();
                     if (editText2 == null) {
                     }
                     workTime = editText2.getText().toString();
                     if (TextUtils.isEmpty(weight)) {
-                        Snackbar.make(v, (CharSequence) "Please input your weight", BaseTransientBottomBar.LENGTH_SHORT).show();
+                        Snackbar.make(v, "Please input your weight", BaseTransientBottomBar.LENGTH_SHORT).show();
                     } else if (Integer.parseInt(weight) > 200 || Integer.parseInt(weight) < 20) {
-                        Snackbar.make(v, (CharSequence) "Please input a valid weight", BaseTransientBottomBar.LENGTH_SHORT).show();
+                        Snackbar.make(v, "Please input a valid weight", BaseTransientBottomBar.LENGTH_SHORT).show();
                     } else if (TextUtils.isEmpty(workTime)) {
-                        Snackbar.make(v, (CharSequence) "Please input your workout time", BaseTransientBottomBar.LENGTH_SHORT).show();
+                        Snackbar.make(v, "Please input your workout time", BaseTransientBottomBar.LENGTH_SHORT).show();
                     } else if (Integer.parseInt(workTime) > 500 || Integer.parseInt(workTime) < 0) {
-                        Snackbar.make(v, (CharSequence) "Please input a valid workout time", BaseTransientBottomBar.LENGTH_SHORT).show();
+                        Snackbar.make(v, "Please input a valid workout time", BaseTransientBottomBar.LENGTH_SHORT).show();
                     } else {
                         SharedPreferences.Editor editor = InitUserInfoActivity.accessgetSharedPrefp(InitUserInfoActivity.this).edit();
                         editor.putInt(AppUtils.Companion.getWEIGHT_KEY(), Integer.parseInt(weight));
@@ -203,13 +187,13 @@ public final class InitUserInfoActivity extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        if (this.doubleBackToExitPressedOnce) {
+        if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             return;
         }
-        this.doubleBackToExitPressedOnce = true;
+        doubleBackToExitPressedOnce = true;
         Window window = getWindow();
-        Snackbar.make(window.getDecorView(), (CharSequence) "Please click BACK again to exit", BaseTransientBottomBar.LENGTH_SHORT).show();
+        Snackbar.make(window.getDecorView(), "Please click BACK again to exit", BaseTransientBottomBar.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

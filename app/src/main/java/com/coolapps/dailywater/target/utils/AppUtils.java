@@ -38,10 +38,6 @@ public final class AppUtils {
         private Companion() {
         }
 
-        public  Companion(Context context) {
-            this();
-        }
-
         public final double calculateIntake(int weight, int workTime) {
             return (((double) (weight * 100)) / 3.0d) + ((double) ((workTime / 6) * 7));
         }

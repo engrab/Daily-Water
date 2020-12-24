@@ -59,6 +59,7 @@ public final class StatusActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status);
+
         AdsUtility.InterstitialAdmob(this);
         SharedPreferences sharedPreferences = getSharedPreferences(AppUtils.Companion.getUSERS_SHARED_PREF(), AppUtils.Companion.getPRIVATE_MODE());
         this.sharedPref = sharedPreferences;
@@ -70,19 +71,14 @@ public final class StatusActivity extends AppCompatActivity {
                 AdsUtility.showIntestitialAds();
             }
         });
-        View findViewById = findViewById(R.id.banner);
-        this.banner = (LinearLayout) findViewById;
-        Activity activity = this;
-        LinearLayout linearLayout = this.banner;
-        if (linearLayout == null) {
-        }
-        AdsUtility.admobBannerCall(activity, linearLayout);
-        ArrayList entries = new ArrayList();
-        ArrayList dateArray = new ArrayList();
-        SqliteHelper sqliteHelper2 = this.sqliteHelper;
-        if (sqliteHelper2 == null) {
-        }
-        Cursor cursor = sqliteHelper2.getAllStats();
+        banner = findViewById(R.id.banner);
+
+        LinearLayout linearLayout = banner;
+        AdsUtility.admobBannerCall(this, linearLayout);
+        ArrayList entries = new ArrayList<>();
+        ArrayList dateArray = new ArrayList<>();
+
+        Cursor cursor = sqliteHelper.getAllStats();
         if (cursor.moveToFirst()) {
             int count = cursor.getCount();
             for (int i = 0; i < count; i++) {

@@ -19,10 +19,9 @@ public final class SqliteHelper extends SQLiteOpenHelper {
     private static final String TABLE_STATS = "TABLE_STATS";
     private final Context context;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public SqliteHelper(Context context2) {
-        super(context2, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context2;
+    public SqliteHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     public final Context getContext() {
@@ -39,8 +38,7 @@ public final class SqliteHelper extends SQLiteOpenHelper {
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (db == null) {
-        }
+
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATS);
         onCreate(db);
     }
@@ -51,8 +49,8 @@ public final class SqliteHelper extends SQLiteOpenHelper {
         }
         ContentValues values = new ContentValues();
         values.put(KEY_DATE, date);
-        values.put(KEY_INTOOK, Integer.valueOf(intook));
-        values.put(KEY_TOTAL_INTAKE, Integer.valueOf(totalintake));
+        values.put(KEY_INTOOK, intook);
+        values.put(KEY_TOTAL_INTAKE, totalintake);
         SQLiteDatabase db = getWritableDatabase();
         long response = db.insert(TABLE_STATS, null, values);
         db.close();
@@ -113,8 +111,7 @@ public final class SqliteHelper extends SQLiteOpenHelper {
   }
 
     public final Cursor getAllStats() {
-        Cursor rawQuery = getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_STATS, null);
-        return rawQuery;
+        return getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_STATS, null);
     }
 
     public final int updateTotalIntake(String date, int totalintake) {

@@ -17,7 +17,7 @@ public final class ChartXValueFormatter extends ValueFormatter {
     }
 
     public String getAxisLabel(float value, AxisBase axis) {
-        String str = dateArray.get((int) value);
-        return str != null ? str : "";
+//        String str = dateArray.get((int) value);
+        return "some thing error";
     }
 }

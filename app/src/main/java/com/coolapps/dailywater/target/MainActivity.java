@@ -114,18 +114,9 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     public  void updateValues() {
-        SharedPreferences sharedPreferences = this.sharedPref;
-        if (sharedPreferences == null) {
-        }
-        this.totalIntake = sharedPreferences.getInt(AppUtils.Companion.getTOTAL_INTAKE(), 0);
-        SqliteHelper sqliteHelper2 = this.sqliteHelper;
-        if (sqliteHelper2 == null) {
-        }
-        String str = this.dateNow;
-        if (str == null) {
-        }
-        this.inTook = sqliteHelper2.getIntook(str);
-        setWaterLevel(this.inTook, this.totalIntake);
+        totalIntake = sharedPref.getInt(AppUtils.Companion.getTOTAL_INTAKE(), 0);
+        inTook = sqliteHelper.getIntook(dateNow);
+        setWaterLevel(inTook, totalIntake);
     }
 
 
@@ -399,15 +390,15 @@ public final class MainActivity extends AppCompatActivity {
     }
 
 
-    public final void setWaterLevel(int inTook2, int totalIntake2) {
+    public final void setWaterLevel(int inTook, int totalIntake) {
         YoYo.with(Techniques.SlideInDown).duration(500).playOn(findViewById(R.id.tvIntook));
-        TextView textView = findViewById(R.id.tvIntook);
-        textView.setText(String.valueOf(inTook2));
-        TextView textView2 = findViewById(R.id.tvTotalIntake);
-        textView2.setText('/' + totalIntake2 + " ml");
+        TextView tvInTake = findViewById(R.id.tvIntook);
+        tvInTake.setText(String.valueOf(inTook));
+        TextView tvTotalInTake = findViewById(R.id.tvTotalIntake);
+        tvTotalInTake.setText('/' + totalIntake + " ml");
         YoYo.with(Techniques.Pulse).duration(500).playOn(findViewById(R.id.intakeProgress));
-        ((StepProgressView) findViewById(R.id.intakeProgress)).setCurrentProgress((int) ((((float) inTook2) / ((float) totalIntake2)) * ((float) 100)));
-        if ((inTook2 * 100) / totalIntake2 > 140) {
+        ((StepProgressView) findViewById(R.id.intakeProgress)).setCurrentProgress((int) ((((float) inTook) / ((float) totalIntake)) * ((float) 100)));
+        if ((inTook * 100) / totalIntake > 140) {
             Snackbar.make(findViewById(R.id.main_activity_parent), "You achieved the goal", BaseTransientBottomBar.LENGTH_SHORT).show();
         }
     }
@@ -419,7 +410,7 @@ public final class MainActivity extends AppCompatActivity {
         }
         this.doubleBackToExitPressedOnce = true;
         Window window = getWindow();
-        Snackbar.make(window.getDecorView().findViewById(16908290), "Please click BACK again to exit", BaseTransientBottomBar.LENGTH_SHORT).show();
+        Snackbar.make(window.getDecorView().findViewById(R.id.main_activity_parent), "Please click BACK again to exit", BaseTransientBottomBar.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
