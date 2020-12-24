@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme">
+        <item name="android:fontFamily">@font/kanit</item>
+        <item name="colorAccent">@color/colorSecondaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    </style>
+
+
+
+    <style name="CardView">
+    </style>
+    <style name="CardView.Dark">
+        <item name="cardBackgroundColor">@color/cardview_dark_background</item>
+    </style>
+    <style name="CardView.Light">
+        <item name="cardBackgroundColor">@color/cardview_light_background</item>
+    </style>
+    <style name="DividerHorizontal">
+        <item name="android:background">@color/dividerColor</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
+    <style name="DividerVertical">
+        <item name="android:background">@color/dividerColor</item>
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+    <style name="ErrorText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+    <style name="HintText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+    <style name="MainTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:fontFamily">@font/kanit</item>
+        <item name="colorAccent">@color/colorSecondaryDark</item>
+        <item name="colorPrimary">@color/colorSecondary</item>
+        <item name="colorPrimaryDark">@color/colorSecondary</item>
+    </style>
+
+    <style name="TextInputLayoutAppearance">
+        <item name="android:background">@drawable/textinput_bg</item>
+        <item name="errorTextAppearance">@style/ErrorText</item>
+        <item name="hintTextAppearance">@style/HintText</item>
+    </style>
+
+</resources>
