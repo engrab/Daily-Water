@@ -1,6 +1,5 @@
 package com.coolapps.dailywater.target;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -33,7 +32,7 @@ import java.util.HashMap;
 import me.itangqi.waveloadingview.WaveLoadingView;
 
 public final class StatusActivity extends AppCompatActivity {
-    private HashMap findViewCache;
+    private HashMap<Integer, View> findViewCache;
     private LinearLayout banner;
     private SharedPreferences sharedPref;
     private SqliteHelper sqliteHelper;
@@ -44,9 +43,9 @@ public final class StatusActivity extends AppCompatActivity {
 
     public View findCachedViewById(int i) {
         if (this.findViewCache == null) {
-            this.findViewCache = new HashMap();
+            this.findViewCache = new HashMap<Integer, View>();
         }
-        View view = (View) this.findViewCache.get(i);
+        View view = this.findViewCache.get(i);
         if (view != null) {
             return view;
         }
@@ -76,7 +75,7 @@ public final class StatusActivity extends AppCompatActivity {
         LinearLayout linearLayout = banner;
         AdsUtility.admobBannerCall(this, linearLayout);
         ArrayList entries = new ArrayList<>();
-        ArrayList dateArray = new ArrayList<>();
+        ArrayList<String> dateArray = new ArrayList<>();
 
         Cursor cursor = sqliteHelper.getAllStats();
         if (cursor.moveToFirst()) {
@@ -155,17 +154,9 @@ public final class StatusActivity extends AppCompatActivity {
             LineChart lineChart18 = (LineChart) findCachedViewById(R.id.chart);
             lineChart18.setData(lineData);
             findCachedViewById(R.id.chart).invalidate();
-            SharedPreferences sharedPreferences2 = this.sharedPref;
-            if (sharedPreferences2 == null) {
-            }
-            int i2 = sharedPreferences2.getInt(AppUtils.Companion.getTOTAL_INTAKE(), 0);
-            SqliteHelper sqliteHelper3 = this.sqliteHelper;
-            if (sqliteHelper3 == null) {
-            }
+            int i2 = sharedPref.getInt(AppUtils.Companion.getTOTAL_INTAKE(), 0);
             String currentDate = AppUtils.Companion.getCurrentDate();
-            if (currentDate == null) {
-            }
-            int remaining = i2 - sqliteHelper3.getIntook(currentDate);
+            int remaining = i2 - sqliteHelper.getIntook(currentDate);
             if (remaining > 0) {
                 TextView textView = (TextView) findCachedViewById(R.id.remainingIntake);
                 textView.setText(remaining + " ml");
@@ -175,22 +166,12 @@ public final class StatusActivity extends AppCompatActivity {
             }
             TextView textView3 = (TextView) findCachedViewById(R.id.targetIntake);
             StringBuilder sb = new StringBuilder();
-            SharedPreferences sharedPreferences3 = this.sharedPref;
-            if (sharedPreferences3 == null) {
-            }
-            sb.append(sharedPreferences3.getInt(AppUtils.Companion.getTOTAL_INTAKE(), 0));
+            sb.append(sharedPref.getInt(AppUtils.Companion.getTOTAL_INTAKE(), 0));
             sb.append(" ml");
             textView3.setText(sb.toString());
-            SqliteHelper sqliteHelper4 = this.sqliteHelper;
-            if (sqliteHelper4 == null) {
-            }
             String currentDate2 = AppUtils.Companion.getCurrentDate();
-            if (currentDate2 == null) {
-            }
-            int intook = sqliteHelper4.getIntook(currentDate2) * 100;
+            int intook = sqliteHelper.getIntook(currentDate2) * 100;
             SharedPreferences sharedPreferences4 = this.sharedPref;
-            if (sharedPreferences4 == null) {
-            }
             int percentage = intook / sharedPreferences4.getInt(AppUtils.Companion.getTOTAL_INTAKE(), 0);
             WaveLoadingView waveLoadingView = (WaveLoadingView) findCachedViewById(R.id.waterLevelView);
             StringBuilder sb2 = new StringBuilder();
