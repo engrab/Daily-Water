@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.coolapps.dailywater.target.utils.AdsUtility;
 import com.coolapps.dailywater.target.utils.AppUtils;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.github.mikephil.charting.data.Entry;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -37,6 +40,7 @@ import params.com.stepprogressview.StepProgressView;
 
 public final class MainActivity extends AppCompatActivity {
     private LinearLayout banner;
+    private static final String TAG = "MainActivity";
 
     public String dateNow;
 
@@ -56,25 +60,19 @@ public final class MainActivity extends AppCompatActivity {
 
     public int totalIntake;
 
-    public static final  String access$getDateNow$p(MainActivity $this) {
-        String str = $this.dateNow;
-        if (str == null) {
-        }
-        return str;
+    public static final  String getDateNow(MainActivity context) {
+
+        return context.dateNow;
     }
 
-    public static final  SharedPreferences access$getSharedPref$p(MainActivity $this) {
-        SharedPreferences sharedPreferences = $this.sharedPref;
-        if (sharedPreferences == null) {
-        }
-        return sharedPreferences;
+    public static final  SharedPreferences getSharedPref(MainActivity context) {
+
+        return context.sharedPref;
     }
 
-    public static final  SqliteHelper access$getSqliteHelper$p(MainActivity $this) {
-        SqliteHelper sqliteHelper2 = $this.sqliteHelper;
-        if (sqliteHelper2 == null) {
-        }
-        return sqliteHelper2;
+    public static final  SqliteHelper getSqliteHelper(MainActivity context) {
+
+        return context.sqliteHelper;
     }
 
 
@@ -83,17 +81,11 @@ public final class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         MobileAds.initialize(this, AdsUtility.admobAppId);
         SharedPreferences sharedPreferences = getSharedPreferences(AppUtils.Companion.getUSERS_SHARED_PREF(), AppUtils.Companion.getPRIVATE_MODE());
-        this.sharedPref = sharedPreferences;
-        this.sqliteHelper = new SqliteHelper(this);
+        sharedPref = sharedPreferences;
+        sqliteHelper = new SqliteHelper(this);
         AdsUtility.InterstitialAdmob(this);
-        SharedPreferences sharedPreferences2 = this.sharedPref;
-        if (sharedPreferences2 == null) {
-        }
-        this.totalIntake = sharedPreferences2.getInt(AppUtils.Companion.getTOTAL_INTAKE(), 0);
-        SharedPreferences sharedPreferences3 = this.sharedPref;
-        if (sharedPreferences3 == null) {
-        }
-        if (sharedPreferences3.getBoolean(AppUtils.Companion.getFIRST_RUN_KEY(), true)) {
+        this.totalIntake = sharedPref.getInt(AppUtils.Companion.getTOTAL_INTAKE(), 0);
+        if (sharedPref.getBoolean(AppUtils.Companion.getFIRST_RUN_KEY(), true)) {
             startActivity(new Intent(this, WalkThroughActivity.class));
             finish();
         } else if (this.totalIntake <= 0) {
@@ -101,16 +93,16 @@ public final class MainActivity extends AppCompatActivity {
             finish();
         }
         String currentDate = AppUtils.Companion.getCurrentDate();
-        if (currentDate == null) {
-        }
+
         this.dateNow = currentDate;
         View findViewById = findViewById(R.id.banner);
         this.banner = (LinearLayout) findViewById;
         Activity activity = this;
         LinearLayout linearLayout = this.banner;
-        if (linearLayout == null) {
-        }
+
         AdsUtility.admobBannerCall(activity, linearLayout);
+        sqliteHelper.addAll(currentDate, 0, totalIntake);
+        updateValues();
     }
 
     public  void updateValues() {
@@ -143,14 +135,8 @@ public final class MainActivity extends AppCompatActivity {
         } else {
             ((FloatingActionButton) findViewById(R.id.btnNotific)).setImageDrawable(getDrawable(R.drawable.ic_bell_disabled));
         }
-        SqliteHelper sqliteHelper2 = this.sqliteHelper;
-        if (sqliteHelper2 == null) {
-        }
-        String str = this.dateNow;
-        if (str == null) {
-        }
-        sqliteHelper2.addAll(str, 0, this.totalIntake);
-        updateValues();
+
+
         findViewById(R.id.btnMenu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,20 +148,25 @@ public final class MainActivity extends AppCompatActivity {
         findViewById(R.id.fabAdd).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Cursor cursor = sqliteHelper.getAllStats();
+                if (cursor.moveToFirst()) {
+                    int count = cursor.getCount();
+
+                    for (int i = 0; i < count; i++) {
+                        Log.d(TAG, "getDate: "+cursor.getString(1));
+                        Log.d(TAG, "getPercentage: "+cursor.getString(2));
+                        cursor.moveToNext();
+                    }
+                }
                 if (selectedOption != null) {
                     if ((inTook * 100) / totalIntake <= 140) {
-                        SqliteHelper access$getSqliteHelper$p = MainActivity.access$getSqliteHelper$p(MainActivity.this);
-                        String access$getDateNow$p = MainActivity.access$getDateNow$p(MainActivity.this);
-                        Integer access$getSelectedOption$p = selectedOption;
-                        if (access$getSelectedOption$p == null) {
+                        SqliteHelper getSqliteHelper = MainActivity.getSqliteHelper(MainActivity.this);
+                        String getDateNow = MainActivity.getDateNow(MainActivity.this);
 
-                        }
-                        if (access$getSqliteHelper$p.addIntook(access$getDateNow$p, access$getSelectedOption$p.intValue()) > 0) {
-                            int access$getInTook$p = inTook;
-                            Integer access$getSelectedOption$p2 = selectedOption;
-                            if (access$getSelectedOption$p2 == null) {
-                            }
-                            inTook = access$getInTook$p + access$getSelectedOption$p2.intValue();
+
+                        if (sqliteHelper.addIntook(AppUtils.Companion.getCurrentDate(), selectedOption) > 0) {
+                            int getInTook = inTook;
+                            inTook = getInTook + selectedOption;
                             setWaterLevel(inTook, totalIntake);
                             Snackbar.make(v, "Your water intake was saved...!!", BaseTransientBottomBar.LENGTH_SHORT).show();
                         }
@@ -208,12 +199,12 @@ public final class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 MainActivity mainActivity = MainActivity.this;
                 mainActivity.notificStatus = !mainActivity.notificStatus;
-                MainActivity.access$getSharedPref$p(mainActivity).edit().putBoolean(AppUtils.Companion.getNOTIFICATION_STATUS_KEY(), mainActivity.notificStatus).apply();
+                MainActivity.getSharedPref(mainActivity).edit().putBoolean(AppUtils.Companion.getNOTIFICATION_STATUS_KEY(), mainActivity.notificStatus).apply();
                 if (mainActivity.notificStatus) {
                     ((FloatingActionButton) mainActivity.findViewById(R.id.btnNotific)).setImageDrawable(mainActivity.getDrawable(R.drawable.ic_bell));
                     Snackbar.make(v, "Notification Enabled..", BaseTransientBottomBar.LENGTH_SHORT).show();
                     AlarmHelper alarmHelper = alarm;
-                    alarmHelper.setAlarm(mainActivity, MainActivity.access$getSharedPref$p(mainActivity).getInt(AppUtils.Companion.getNOTIFICATION_FREQUENCY_KEY(), 30));
+                    alarmHelper.setAlarm(mainActivity, MainActivity.getSharedPref(mainActivity).getInt(AppUtils.Companion.getNOTIFICATION_FREQUENCY_KEY(), 30));
                     return;
                 }
                 ((FloatingActionButton) mainActivity.findViewById(R.id.btnNotific)).setImageDrawable(mainActivity.getDrawable(R.drawable.ic_bell_disabled));
@@ -231,9 +222,9 @@ public final class MainActivity extends AppCompatActivity {
         findViewById(R.id.op50ml).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar access$getSnackbar$p;
-                if (!(snackbar == null || (access$getSnackbar$p = snackbar) == null)) {
-                    access$getSnackbar$p.dismiss();
+                Snackbar getSnackbar;
+                if (!(snackbar == null || (getSnackbar = snackbar) == null)) {
+                    getSnackbar.dismiss();
                 }
                 selectedOption = 50;
                 LinearLayout linearLayout = findViewById(R.id.op50ml);
@@ -253,9 +244,9 @@ public final class MainActivity extends AppCompatActivity {
         findViewById(R.id.op100ml).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar access$getSnackbar$p;
-                if (!(snackbar == null || (access$getSnackbar$p = snackbar) == null)) {
-                    access$getSnackbar$p.dismiss();
+                Snackbar getSnackbar;
+                if (!(snackbar == null || (getSnackbar = snackbar) == null)) {
+                    getSnackbar.dismiss();
                 }
                 selectedOption = 100;
                 LinearLayout linearLayout = findViewById(R.id.op50ml);

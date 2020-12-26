@@ -1,12 +1,16 @@
 package com.coolapps.dailywater.target.utils;
 
+import android.util.Log;
+
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+
 import java.util.ArrayList;
 
 
 public final class ChartXValueFormatter extends ValueFormatter {
     private final ArrayList<String> dateArray;
+    private static final String TAG = "ChartXValueFormatter";
 
     public ChartXValueFormatter(ArrayList<String> dateArray) {
         this.dateArray = dateArray;
@@ -18,8 +22,9 @@ public final class ChartXValueFormatter extends ValueFormatter {
 
     public String getAxisLabel(float value, AxisBase axis) {
 //        String str = dateArray.get((int) value);
-        ArrayList<String> dateArray = getDateArray();
-        return dateArray.get((int) value);
+
+        Log.d(TAG, "getAxisLabel: "+value);
+        return dateArray.get(0);
 
     }
 }

@@ -79,12 +79,11 @@ public final class SqliteHelper extends SQLiteOpenHelper {
     }
 
     public final int addIntook(String date, int selectedOption) {
-        int intook = getIntook(date);
+
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_INTOOK, Integer.valueOf(intook + selectedOption));
-        String str = TABLE_STATS;
-        int response = db.update(str, contentValues, KEY_DATE + " = ?", new String[]{date});
+        contentValues.put(KEY_INTOOK, getIntook(date) + selectedOption);
+        int response = db.update(TABLE_STATS, contentValues, KEY_DATE + " = ?", new String[]{date});
         db.close();
         return response;
     }
@@ -115,12 +114,12 @@ public final class SqliteHelper extends SQLiteOpenHelper {
     }
 
     public final int updateTotalIntake(String date, int totalintake) {
-        int intook = getIntook(date);
+
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_TOTAL_INTAKE, Integer.valueOf(totalintake));
-        String str = TABLE_STATS;
-        int response = db.update(str, contentValues, KEY_DATE + " = ?", new String[]{date});
+        contentValues.put(KEY_TOTAL_INTAKE, totalintake);
+
+        int response = db.update(TABLE_STATS, contentValues, KEY_DATE + " = ?", new String[]{date});
         db.close();
         return response;
     }

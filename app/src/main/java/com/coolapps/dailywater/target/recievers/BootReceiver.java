@@ -12,9 +12,6 @@ public final class BootReceiver extends BroadcastReceiver {
 
     public void onReceive(Context context, Intent intent) {
         if (intent != null && intent.getAction() != null ) {
-            if (context == null) {
-
-            }
             SharedPreferences prefs = context.getSharedPreferences(AppUtils.Companion.getUSERS_SHARED_PREF(), AppUtils.Companion.getPRIVATE_MODE());
             int notificationFrequency = prefs.getInt(AppUtils.Companion.getNOTIFICATION_FREQUENCY_KEY(), 60);
             boolean notificationsNewMessage = prefs.getBoolean("notifications_new_message", true);
