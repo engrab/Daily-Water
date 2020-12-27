@@ -58,19 +58,19 @@ public final class MainActivity extends AppCompatActivity {
 
     public SqliteHelper sqliteHelper;
 
-    public int totalIntake;
+    public int totalIntake = 1000;
 
-    public static final  String getDateNow(MainActivity context) {
+    public static final String getDateNow(MainActivity context) {
 
         return context.dateNow;
     }
 
-    public static final  SharedPreferences getSharedPref(MainActivity context) {
+    public static final SharedPreferences getSharedPref(MainActivity context) {
 
         return context.sharedPref;
     }
 
-    public static final  SqliteHelper getSqliteHelper(MainActivity context) {
+    public static final SqliteHelper getSqliteHelper(MainActivity context) {
 
         return context.sqliteHelper;
     }
@@ -102,10 +102,16 @@ public final class MainActivity extends AppCompatActivity {
 
         AdsUtility.admobBannerCall(activity, linearLayout);
         sqliteHelper.addAll(currentDate, 0, totalIntake);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         updateValues();
     }
 
-    public  void updateValues() {
+    public void updateValues() {
         totalIntake = sharedPref.getInt(AppUtils.Companion.getTOTAL_INTAKE(), 0);
         inTook = sqliteHelper.getIntook(dateNow);
         setWaterLevel(inTook, totalIntake);
@@ -153,8 +159,8 @@ public final class MainActivity extends AppCompatActivity {
                     int count = cursor.getCount();
 
                     for (int i = 0; i < count; i++) {
-                        Log.d(TAG, "getDate: "+cursor.getString(1));
-                        Log.d(TAG, "getPercentage: "+cursor.getString(2));
+                        Log.d(TAG, "getDate: " + cursor.getString(1));
+                        Log.d(TAG, "getPercentage: " + cursor.getString(2));
                         cursor.moveToNext();
                     }
                 }
@@ -389,8 +395,11 @@ public final class MainActivity extends AppCompatActivity {
         tvTotalInTake.setText('/' + totalIntake + " ml");
         YoYo.with(Techniques.Pulse).duration(500).playOn(findViewById(R.id.intakeProgress));
         ((StepProgressView) findViewById(R.id.intakeProgress)).setCurrentProgress((int) ((((float) inTook) / ((float) totalIntake)) * ((float) 100)));
-        if ((inTook * 100) / totalIntake > 140) {
-            Snackbar.make(findViewById(R.id.main_activity_parent), "You achieved the goal", BaseTransientBottomBar.LENGTH_SHORT).show();
+
+        if (inTook != 0 && totalIntake != 0) {
+            if ((inTook * 100) / totalIntake > 140) {
+                Snackbar.make(findViewById(R.id.main_activity_parent), "You achieved the goal", BaseTransientBottomBar.LENGTH_SHORT).show();
+            }
         }
     }
 

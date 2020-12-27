@@ -21,10 +21,9 @@ public final class ChartXValueFormatter extends ValueFormatter {
     }
 
     public String getAxisLabel(float value, AxisBase axis) {
-//        String str = dateArray.get((int) value);
 
-        Log.d(TAG, "getAxisLabel: "+value);
         return dateArray.get(0);
+
 
     }
 }

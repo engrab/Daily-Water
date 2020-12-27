@@ -10,13 +10,13 @@ import java.io.Closeable;
 
 
 public final class SqliteHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "DATABASE_NAME";
+    private static final String DATABASE_NAME = "DrinkWaterDB";
     private static final int DATABASE_VERSION = 1;
-    private static final String KEY_DATE = "KEY_DATE";
-    private static final String KEY_ID = "KEY_ID";
-    private static final String KEY_INTOOK = "KEY_INTOOK";
-    private static final String KEY_TOTAL_INTAKE = "KEY_TOTAL_INTAKE";
-    private static final String TABLE_STATS = "TABLE_STATS";
+    private static final String KEY_DATE = "KeyDate";
+    private static final String KEY_ID = "KeyId";
+    private static final String KEY_INTOOK = "KeyInTook";
+    private static final String KEY_TOTAL_INTAKE = "KeyTotalInTake";
+    private static final String TABLE_NAME = "DrinkWater";
     private final Context context;
 
     public SqliteHelper(Context context) {
@@ -25,13 +25,13 @@ public final class SqliteHelper extends SQLiteOpenHelper {
     }
 
     public final Context getContext() {
-        return this.context;
+        return context;
     }
 
 
 
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_STATS_TABLE = "CREATE TABLE " + TABLE_STATS + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_DATE + " TEXT UNIQUE," + KEY_INTOOK + " INT," + KEY_TOTAL_INTAKE + " INT" + ")";
+        String CREATE_STATS_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_DATE + " TEXT UNIQUE," + KEY_INTOOK + " INT," + KEY_TOTAL_INTAKE + " INT" + ")";
         if (db != null) {
             db.execSQL(CREATE_STATS_TABLE);
         }
@@ -39,7 +39,7 @@ public final class SqliteHelper extends SQLiteOpenHelper {
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
 
@@ -52,7 +52,7 @@ public final class SqliteHelper extends SQLiteOpenHelper {
         values.put(KEY_INTOOK, intook);
         values.put(KEY_TOTAL_INTAKE, totalintake);
         SQLiteDatabase db = getWritableDatabase();
-        long response = db.insert(TABLE_STATS, null, values);
+        long response = db.insert(TABLE_NAME, null, values);
         db.close();
         return response;
     }
@@ -63,7 +63,7 @@ public final class SqliteHelper extends SQLiteOpenHelper {
         selectQuery.append("SELECT ");
         selectQuery.append(KEY_INTOOK);
         selectQuery.append(" FROM ");
-        selectQuery.append(TABLE_STATS);
+        selectQuery.append(TABLE_NAME);
         selectQuery.append(" WHERE ");
         selectQuery.append(KEY_DATE);
         selectQuery.append(" = ?");
@@ -71,8 +71,7 @@ public final class SqliteHelper extends SQLiteOpenHelper {
         Closeable rawQuery = getReadableDatabase().rawQuery(selectQuery.toString(), new String[]{date});
         Cursor it = (Cursor) rawQuery;
         if (it.moveToFirst()) {
-            int i = it.getInt(it.getColumnIndex(KEY_INTOOK));
-            return i;
+            return it.getInt(it.getColumnIndex(KEY_INTOOK));
         }
 
         return 0;
@@ -83,7 +82,7 @@ public final class SqliteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_INTOOK, getIntook(date) + selectedOption);
-        int response = db.update(TABLE_STATS, contentValues, KEY_DATE + " = ?", new String[]{date});
+        int response = db.update(TABLE_NAME, contentValues, KEY_DATE + " = ?", new String[]{date});
         db.close();
         return response;
     }
@@ -94,7 +93,7 @@ public final class SqliteHelper extends SQLiteOpenHelper {
         selectQuery.append("SELECT ");
         selectQuery.append(KEY_INTOOK);
         selectQuery.append(" FROM ");
-        selectQuery.append(TABLE_STATS);
+        selectQuery.append(TABLE_NAME);
         selectQuery.append(" WHERE ");
         selectQuery.append(KEY_DATE);
         selectQuery.append(" = ?");
@@ -110,7 +109,7 @@ public final class SqliteHelper extends SQLiteOpenHelper {
   }
 
     public final Cursor getAllStats() {
-        return getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_STATS, null);
+        return getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_NAME, null);
     }
 
     public final int updateTotalIntake(String date, int totalintake) {
@@ -119,7 +118,7 @@ public final class SqliteHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_TOTAL_INTAKE, totalintake);
 
-        int response = db.update(TABLE_STATS, contentValues, KEY_DATE + " = ?", new String[]{date});
+        int response = db.update(TABLE_NAME, contentValues, KEY_DATE + " = ?", new String[]{date});
         db.close();
         return response;
     }

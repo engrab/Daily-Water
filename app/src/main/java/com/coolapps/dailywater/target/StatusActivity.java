@@ -23,6 +23,7 @@ import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -33,16 +34,14 @@ import java.util.HashMap;
 import me.itangqi.waveloadingview.WaveLoadingView;
 
 public final class StatusActivity extends AppCompatActivity {
-    private HashMap<Integer, View> findViewCache;
     private LinearLayout banner;
     private SharedPreferences sharedPref;
     private SqliteHelper sqliteHelper;
     public float totalGlasses;
     public float totalPercentage;
     private static final String TAG = "StatusActivity";
-    ArrayList entries = new ArrayList<>();
-    ArrayList<String> dateArray = new ArrayList<>();
-
+    private ArrayList<Entry> entries = new ArrayList<>();
+    private final ArrayList<String> dateArray = new ArrayList<>();
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -53,13 +52,7 @@ public final class StatusActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(AppUtils.Companion.getUSERS_SHARED_PREF(), AppUtils.Companion.getPRIVATE_MODE());
         this.sharedPref = sharedPreferences;
         this.sqliteHelper = new SqliteHelper(this);
-        findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                AdsUtility.showIntestitialAds();
-            }
-        });
+
         banner = findViewById(R.id.banner);
         TextView textView = findViewById(R.id.remainingIntake);
         TextView textView3 = findViewById(R.id.targetIntake);
@@ -79,11 +72,7 @@ public final class StatusActivity extends AppCompatActivity {
                 this.totalPercentage += percent;
                 this.totalGlasses += (float) cursor.getInt(2);
                 entries.add(new Entry((float) i, percent));
-                Log.d(TAG, "count: "+count);
-                Log.d(TAG, "date: "+cursor.getString(1));
-                Log.d(TAG, "percent: "+cursor.getInt(2));
-
-
+                Log.d(TAG, "onCreate: "+i);
                 cursor.moveToNext();
             }
         } else {
@@ -94,8 +83,8 @@ public final class StatusActivity extends AppCompatActivity {
 //            Log.d(TAG, "onCreate: Enteries Size"+entries.size());
 //            Log.d(TAG, "onCreate: Date Array size"+dateArray.size());
             LineChart lineChart = findViewById(R.id.chart);
-            Description description = lineChart.getDescription();
-            description.setEnabled(false);
+            lineChart.getDescription().setEnabled(false);
+
             lineChart.animateY(1000, Easing.Linear);
             lineChart.getViewPortHandler().setMaximumScaleX(1.5f);
             lineChart.getXAxis().setDrawGridLines(false);
@@ -120,7 +109,7 @@ public final class StatusActivity extends AppCompatActivity {
             xAxis3.setTextColor(ViewCompat.MEASURED_STATE_MASK);
             lineChart.getAxisLeft().setDrawAxisLine(false);
             lineChart.getXAxis().setDrawAxisLine(false);
-            ((LineChart) findViewById(R.id.chart)).setDrawMarkers(false);
+            lineChart.setDrawMarkers(false);
             XAxis xAxis4 = lineChart.getXAxis();
             xAxis4.setLabelCount(5);
             YAxis rightAxix = lineChart.getAxisRight();
@@ -141,6 +130,7 @@ public final class StatusActivity extends AppCompatActivity {
             LineData lineData = new LineData(dataSet);
 
             XAxis xAxis5 = lineChart.getXAxis();
+
             xAxis5.setValueFormatter(new ChartXValueFormatter(dateArray));
             lineChart.setData(lineData);
             findViewById(R.id.chart).invalidate();
@@ -166,5 +156,12 @@ public final class StatusActivity extends AppCompatActivity {
             waveLoadingView.setCenterTitle(sb2.toString());
             waveLoadingView.setProgressValue(percentage);
         }
+        findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                AdsUtility.showIntestitialAds();
+            }
+        });
     }
 }

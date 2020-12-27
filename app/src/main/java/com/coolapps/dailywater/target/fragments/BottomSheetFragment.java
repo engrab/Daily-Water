@@ -355,8 +355,7 @@ public final class BottomSheetFragment extends BottomSheetDialogFragment {
                     if (currentTarget != Integer.parseInt(customTarget)) {
                         editor.putInt(AppUtils.Companion.getTOTAL_INTAKE(), Integer.parseInt(customTarget));
                         String currentDate = AppUtils.Companion.getCurrentDate();
-                        if (currentDate == null) {
-                        }
+
                         sqliteHelper.updateTotalIntake(currentDate, Integer.parseInt(customTarget));
                     } else {
                         double totalIntake = AppUtils.Companion.calculateIntake(Integer.parseInt(weight), Integer.parseInt(workTime));
